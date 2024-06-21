@@ -1,0 +1,148 @@
+{% extends "layouts/admin.html" %} {% block content %}
+<div>
+  <!-- BEGIN BREADCRUMBS -->
+  <div class="secondary-nav">
+    <div class="breadcrumbs-container" data-page-heading="Analytics">
+      <header class="header navbar navbar-expand-sm">
+        <a
+          href="javascript:void(0);"
+          class="btn-toggle sidebarCollapse"
+          data-placement="bottom"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-menu"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </a>
+        <div class="d-flex breadcrumb-content">
+          <div class="page-header">
+            <div class="page-title"></div>
+            <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                  <a href="/admin/image-clasification">Image Clasification</a>
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </header>
+    </div>
+  </div>
+  <!-- END BREADCRUMBS -->
+
+  <div class="layout-top-spacing">
+    <div class="row mb-4 layout-spacing layout-top-spacing">
+      <div class="col-md-6 mb-3">
+        <div
+          class="widget-content widget-content-area blog-create-section"
+          style="border-radius: 8px !important"
+        >
+          <form
+            id="upload-form"
+            action="/predict"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <div class="row mb-2">
+              <div class="col-md-12 col-sm-8">
+                <label>Input image</label>
+                <img
+                  class="img-preview img-fluid col-sm-5"
+                  style="width: 70%"
+                />
+                <input
+                  type="file"
+                  name="file"
+                  id="image"
+                  class="my-2 form-control"
+                  placeholder="image"
+                  onchange="previewImage()"
+                  accept=".png, .jpg, .jpeg"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-info mb-2 me-4 _effect--ripple waves-effect waves-light"
+            >
+              Upload
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div
+          class="widget-content widget-content-area blog-create-section"
+          style="border-radius: 8px !important"
+        >
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <label>Classification result</label>
+              <div id="result"></div>
+              <!-- Di sinilah label prediksi akan ditampilkan -->
+              <div id="accuracy"></div>
+              <!-- Di sini akan ditampilkan akurasi prediksi -->
+              <div id="description"></div>
+              <!-- Di sini akan ditampilkan deskripsi prediksi -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Prediksi -->
+<script>
+  document
+    .getElementById("upload-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      var formData = new FormData(this);
+      fetch("/predict", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("result").innerText =
+            "Predicted label: " + data.predicted_label;
+          document.getElementById("accuracy").innerText =
+            "Accuracy: " + data.accuracy;
+          document.getElementById("description").innerText =
+            "Description: " + data.description;
+          // Tambahkan kode untuk memperbarui tampilan prediksi di sini
+        })
+        .catch((error) => console.error("Error:", error));
+    });
+
+  function previewImage() {
+    var preview = document.querySelector(".img-preview");
+    var file = document.querySelector("input[type=file]").files[0];
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+      preview.src = reader.result;
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      preview.src = "";
+    }
+  }
+</script>
+{% endblock %}

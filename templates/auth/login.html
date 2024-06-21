@@ -1,0 +1,41 @@
+{% extends "layouts/auth.html" %}
+
+{% block content %}
+<div class="card-body">
+    
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            
+            <h2>Login</h2>
+            <p>Masukkan email dan kata sandi Anda untuk login</p>
+            
+        </div>
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="text" class="form-control">
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="mb-4">
+                <button class="btn btn-secondary w-100">LOGIN</button>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="text-center">
+                <p class="mb-0">Belum punya akun ? <a href="/register" class="text-warning">Register</a></p>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+{% endblock %}
